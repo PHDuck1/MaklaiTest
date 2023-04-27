@@ -32,24 +32,51 @@ def is_changeable(tree:  Tree) -> bool:
     return True
 
 
-def get_np_indexes(tree: Tree) -> List[int]:
-    """Find indexes of NP's in the tree"""
+def get_indexes(tree: Tree, label: str) -> List[int]:
+    """Find indexes of a label in direct children of a tree"""
     indexes = []
     for index, child in enumerate(tree):
-        if child.label() == 'NP':
+        if child.label() == label:
             indexes.append(index)
     return indexes
 
 
-def permute_subtree(tree: Tree, np_indexes: List) -> Generator[Tree, None, None]:
+def permute_subtree(tree: Tree, indexes_to_permute: List) -> Generator[Tree, None, None]:
     """Generate alternative permutations of the subtree"""
-    perms = permutations(np_indexes)
+    perms = permutations(indexes_to_permute)
 
     for perm in perms:
         new_tree = deepcopy(tree)
-        for old_index, new_index in zip(np_indexes, perm):
+        for old_index, new_index in zip(indexes_to_permute, perm):
             new_tree[old_index] = tree[new_index]
         yield new_tree
+
+
+def change_node_by_path(tree: Tree, path, new_node):
+    """Get node in tree at specified path"""
+    node = tree
+    # Get the parent of the node to be changed
+    for i in path[:-1]:
+        node = node[i]
+
+    # Change the node at path to new one
+    node[path[-1]] = new_node
+    return tree
+
+
+def find_subtrees(tree: Tree, label: str, path=()):
+    """Find subtrees with provided label and return their paths"""
+    if not isinstance(tree, Tree):
+        return []
+
+    if tree.label() == label:
+        if is_changeable(tree):
+            return [(tree, path)]
+
+    matches = []
+    for i, subtree in enumerate(tree):
+        matches.extend(find_subtrees(subtree, label, path=path+(i,)))
+    return matches
 
 
 def main():
@@ -59,10 +86,25 @@ def main():
     syntax_tree = Tree.fromstring(input_tree)
     syntax_tree.pretty_print(unicodelines=True, nodedist=4)
 
-    for subtree in syntax_tree.subtrees(filter=lambda s: s.label() == 'NP'):
-        if is_changeable(subtree):
-            for changed_tree in permute_subtree(subtree, get_np_indexes(subtree)):
-                changed_tree.pretty_print()
+    node_to_change, path = find_subtrees(syntax_tree, 'NP')[0]
+    np_indexes = get_indexes(node_to_change, 'NP')
+
+    perms = permute_subtree(node_to_change, np_indexes)
+
+    changed_trees = []
+    for perm in perms:
+        tree = deepcopy(syntax_tree)
+
+        new_tree = change_node_by_path(tree, path,  perm)
+        if new_tree == syntax_tree:
+            continue
+
+        changed_trees.append(new_tree)
+
+    for tree in changed_trees:
+        tree.pretty_print(unicodelines=True, nodedist=4)
+    print(syntax_tree == new_tree)
+    print(len(changed_trees))
 
 
 if __name__ == '__main__':
