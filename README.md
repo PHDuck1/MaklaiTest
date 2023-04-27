@@ -1,6 +1,8 @@
 # README
 
-Доброго дня! Цей репозиторій - 
+### Доброго дня! 
+Цей репозиторій - виконане тестове завдання для проходження на стажування в Maklai: https://dou.ua/calendar/46895/?from=first-job
+### Виконав Думанський Дмитро
 
 ## Installation
 
@@ -9,7 +11,6 @@ To run this project, please follow these steps:
 1. Clone the repository to your local machine using the command:
 2. Navigate to the project directory in the terminal.
 3. Create and activate virtual environment using the following command:
-
 ### Linux: 
 ```
 python3 -m venv venv
@@ -36,7 +37,11 @@ request to the `/paraphrase` endpoint with a tree parameter. The tree parameter 
 
 Here is an example of a valid url:
 ```
-http://localhost:8000/paraphrase?tree=(S%20(NP%20(NP%20(DT%20The)%20(JJ%20charming)%20(NNP%20Gothic)%20(NNP%20Quarter)%20)%20(,%20,)%20(CC%20or)%20(NP%20(NNP%20Barri)%20(NNP%20G%C3%B2tic)%20)%20)%20(,%20,)%20(VP%20(VBZ%20has)%20(NP%20(NP%20(JJ%20narrow)%20(JJ%20medieval)%20(NNS%20streets)%20)%20(VP%20(VBN%20filled)%20(PP%20(IN%20with)%20(NP%20(NP%20(JJ%20trendy)%20(NNS%20bars)%20)%20(,%20,)%20(NP%20(NNS%20clubs)%20)%20(CC%20and)%20(NP%20(JJ%20Catalan)%20(NNS%20restaurants)%20)%20)%20)%20)%20)%20)%20)
+http:localhost:8000/paraphrase?tree=(S (NP (NP (DT The) (JJ charming) (NNP Gothic) (NNP
+Quarter) ) (, ,) (CC or) (NP (NNP Barri) (NNP Gòtic) ) ) (, ,) (VP (VBZ has) (NP (NP
+(JJ narrow) (JJ medieval) (NNS streets) ) (VP (VBN filled) (PP (IN with) (NP (NP (JJ
+trendy) (NNS bars) ) (, ,) (NP (NNS clubs) ) (CC and) (NP (JJ Catalan) (NNS
+restaurants) ) ) ) ) ) ) )
 ```
 
 The expected response should be similar to the content of the `result.json` file in the repository.
