@@ -1,3 +1,5 @@
+import re
+
 from typing import Generator, List, Tuple, Dict
 from itertools import permutations, product
 from nltk.tree import *
@@ -118,7 +120,7 @@ def get_multiple_subtrees_perms(changeable_subtrees: List[Tuple[int]], syntax_tr
     return multiple_node_perms
 
 
-def get_paraphrased_trees(subtrees_permutations: Dict[Tuple[int], List[Tree]], syntax_tree: Tree):
+def paraphrase_trees(subtrees_permutations: Dict[Tuple[int], List[Tree]], syntax_tree: Tree) -> List[Tree]:
     """Get all possible paraphrased trees from permutations of subtrees"""
 
     # Generate all possible combinations of permutations of subtrees using itertools.product
@@ -145,27 +147,27 @@ def get_paraphrased_trees(subtrees_permutations: Dict[Tuple[int], List[Tree]], s
     return paraphrased_trees
 
 
-def main():
-    with open('tree.txt', 'r') as f:
-        input_tree = f.read()
+def clean_output(tree: Tree) -> str:
+    """Clean output tree"""
+    str_tree = str(tree)
+    one_line_tree = str_tree.replace('\n', ' ')
+    clean_string = re.sub(' +', ' ', one_line_tree)
+    return clean_string
 
-    syntax_tree = Tree.fromstring(input_tree)
-    syntax_tree.pretty_print()
+
+def get_paraphrased_trees(syntax_tree: Tree) -> list[dict[str, str]] | None:
+    """Get all possible paraphrased trees from permutations of NP subtrees"""
 
     # Find subtrees with label 'NP', which have child NP's whose order can be changed, and return their paths
     changeable_subtrees = find_changeable_subtrees(syntax_tree, 'NP')
 
     if not changeable_subtrees:
-        return [syntax_tree]
+        return None
 
     # Get permutation for subtrees in positions got from previous step
     subtrees_permutations = get_multiple_subtrees_perms(changeable_subtrees, syntax_tree)
 
     # Get paraphrased trees
-    paraphrased_trees = get_paraphrased_trees(subtrees_permutations, syntax_tree)
+    paraphrased_trees = paraphrase_trees(subtrees_permutations, syntax_tree)
 
-    print(*[str(t) for t in paraphrased_trees], sep='\n\n')
-
-
-if __name__ == '__main__':
-    main()
+    return [{'tree': clean_output(tree)} for tree in paraphrased_trees]
