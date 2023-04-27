@@ -8,7 +8,7 @@
 
 To run this project, please follow these steps:
 
-1. Clone the repository to your local machine using the command:
+1. Clone the repository to your local machine.
 2. Navigate to the project directory in the terminal.
 3. Create and activate virtual environment using the following command:
 ### Linux: 
@@ -32,10 +32,8 @@ uvicorn main:app
 
 ## Usage
 
-After running the project, you can access it on http://localhost:8000/. To paraphrase a sentence, you need to send a
-request to the `/paraphrase` endpoint with a tree parameter. The tree parameter should be a nltk tree in string format.
+After running the project, you can copy next url and paste in into web-browser.
 
-Here is an example of a valid url:
 ```
 http:localhost:8000/paraphrase?tree=(S (NP (NP (DT The) (JJ charming) (NNP Gothic) (NNP
 Quarter) ) (, ,) (CC or) (NP (NNP Barri) (NNP Gòtic) ) ) (, ,) (VP (VBZ has) (NP (NP
